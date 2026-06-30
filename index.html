@@ -310,5 +310,136 @@
   </div>
 </footer>
 
+<!-- Floating Chatbot Widget -->
+<div id="dpn-chatbot" style="position:fixed;bottom:20px;right:20px;z-index:9999;font-family:var(--body);">
+  <button id="dpn-chat-toggle" aria-label="Open chat" style="
+    width:56px;height:56px;border-radius:50%;
+    background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep));
+    color:#1a1304;border:none;cursor:pointer;
+    box-shadow:0 12px 28px rgba(0,0,0,0.45);
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;transition:transform .2s;">
+    CHAT
+  </button>
+  <div id="dpn-chat-window" style="
+    display:none;position:absolute;bottom:70px;right:0;width:340px;max-width:calc(100vw - 40px);
+    background:#121212;border:1px solid var(--line);border-radius:12px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden;flex-direction:column;">
+    <div style="padding:16px;background:var(--navy-soft);border-bottom:1px solid var(--line);">
+      <div style="font-weight:700;color:#fff;font-size:15px;">Digital Pro Now · Chat</div>
+      <div style="color:var(--gold);font-size:11px;margin-top:2px;">We reply instantly</div>
+    </div>
+    <div id="dpn-chat-messages" style="
+      padding:14px;min-height:260px;max-height:340px;overflow-y:auto;
+      display:flex;flex-direction:column;gap:10px;
+      background:#0a0a0a;">
+    </div>
+    <div style="padding:12px;border-top:1px solid var(--line);display:flex;gap:8px;">
+      <input id="dpn-chat-input" type="text" placeholder="Type your message…" style="
+        flex:1;background:#1a1a1a;color:#fff;border:1px solid #2a2a2a;border-radius:6px;
+        padding:10px 12px;outline:none;font-size:14px;">
+      <button id="dpn-chat-send" style="
+        background:linear-gradient(135deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep));
+        color:#1a1304;border:none;border-radius:6px;padding:0 14px;font-weight:700;cursor:pointer;">
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const toggle = document.getElementById('dpn-chat-toggle');
+  const win = document.getElementById('dpn-chat-window');
+  const messages = document.getElementById('dpn-chat-messages');
+  const input = document.getElementById('dpn-chat-input');
+  const send = document.getElementById('dpn-chat-send');
+
+  function showBot(text){
+    const div = document.createElement('div');
+    div.style.cssText = 'align-self:flex-start;background:#1c1c1e;color:#e8e8ec;padding:10px 12px;border-radius:10px 10px 10px 2px;font-size:14px;max-width:85%;line-height:1.4;';
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+  function showUser(text){
+    const div = document.createElement('div');
+    div.style.cssText = 'align-self:flex-end;background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:#1a1304;padding:10px 12px;border-radius:10px 10px 2px 10px;font-size:14px;font-weight:600;max-width:85%;line-height:1.4;';
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+  function showTyping(){
+    const div = document.createElement('div');
+    div.id = 'dpn-typing';
+    div.style.cssText = 'align-self:flex-start;background:#1c1c1e;color:#a9a9ad;padding:10px 12px;border-radius:10px 10px 10px 2px;font-size:13px;font-style:italic;';
+    div.textContent = 'Bot is typing…';
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+  function hideTyping(){ const t = document.getElementById('dpn-typing'); if(t) t.remove(); }
+
+  const botDelay = () => new Promise(r => setTimeout(r, 600 + Math.random()*400));
+
+  const intents = [
+    { keywords: ['price','cost','pay','paid','free'], reply: 'joining the community is 100% free right now. Would you like to save your spot?' },
+    { keywords: ['join','sign up','register','how do i'], reply: 'Just drop your email in the form on this page and we’ll send you the blueprint + community access.' },
+    { keywords: ['what is this','about','digital pro now','wy p'], reply: 'Digital Pro Now is a done-for-you digital business system + WYP x Digital Growth Community for faith-driven growth.' },
+    { keywords: ['blueprint','whats in it','how it works'], reply: 'The blueprint shows the exact steps to launch an automated digital income system. Want me to send it to your inbox?' },
+    { keywords: ['ai','automation'], reply: 'we teach practical AI and automation skills you can use this week — no tech degree required.' },
+    { keywords: ['hello','hi','hey'], reply: 'Hey! 👋 How can I help you today?' },
+    { keywords: ['help','support'], reply: 'I can answer quick questions. If you need more, leave your email and the team will reach out.' },
+  ];
+
+  let askedEmail = false;
+  let askedName = false;
+
+  function getIntent(msg){
+    const m = msg.toLowerCase();
+    for(const i of intents){
+      if(i.keywords.some(k => m.includes(k))) return i.reply;
+    }
+    return "Great question — leave your email and our team will get back to you with the details.";
+  }
+
+  function askEmail(){
+    if(askedEmail) return;
+    askedEmail = true;
+    showBot('One quick thing — what’s the best email to send you the details?');
+  }
+
+  async function handleUser(text){
+    showUser(text);
+    showTyping();
+    await botDelay();
+    hideTyping();
+    const reply = getIntent(text);
+    showBot(reply);
+    askEmail();
+  }
+
+  function openWin(){
+    win.style.display = 'flex';
+    toggle.textContent = '×';
+    if(messages.children.length === 0){
+      showBot("Hi there! 👋 I'm the Digital Pro Now assistant. Ask me anything — pricing, the blueprint, community, or how to get started.");
+    }
+  }
+  function closeWin(){
+    win.style.display = 'none';
+    toggle.textContent = 'CHAT';
+  }
+
+  toggle.onclick = () => win.style.display === 'flex' ? closeWin() : openWin();
+  send.onclick = () => {
+    const v = input.value.trim();
+    if(!v) return;
+    handleUser(v);
+    input.value = '';
+  };
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') send.click(); });
+})();
+</script>
+
 </body>
 </html>

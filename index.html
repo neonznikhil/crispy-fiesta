@@ -440,7 +440,16 @@ RULES:
         ],
         { model: "openai/gpt-5.5" }
       );
-      const reply = typeof raw === "string" ? raw : (raw?.choices?.[0]?.message?.content ?? raw?.text ?? raw?.message ?? "Thanks! For more details, enter your email and our team will help.");
+      console.log("Puter raw response:", raw);
+
+      let reply = "";
+      if (typeof raw === "string") reply = raw;
+      else if (raw && typeof raw === "object") {
+        reply = raw.content ?? raw.text ?? raw.message ?? raw.output ?? raw.result ?? raw.choices?.[0]?.message?.content ?? raw.data ?? "";
+        if (typeof reply !== "string") reply = JSON.stringify(reply);
+      }
+      if (!reply || reply === "{}" || reply === "[]") reply = "Thanks! For more details, enter your email and our team will help.";
+
       hideTyping();
       chatHistory.push({ role: "assistant", content: reply });
       showBot(reply);

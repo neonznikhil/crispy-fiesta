@@ -433,36 +433,41 @@ RULES:
   async function askAI(userText){
     showTyping();
     try {
+      const payload = [
+        { role: "system", content: SYSTEM_PROMPT },
+        ...chatHistory
+      ];
+
+      console.log("Sending to Puter:", JSON.stringify(payload));
       const raw = await puter.ai.chat(
-        [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...chatHistory
-        ],
+        chatHistory.length > 0
+          ? payload
+          : `${SYSTEM_PROMPT}\n\nUser: ${userText}`,
         { model: "meta-llama/llama-4-maverick" }
       );
-      console.log("Puter raw response:", raw);
+      console.log("Puter raw response:", raw, "type:", typeof raw);
 
       let reply = null;
       if (!raw) throw new Error("empty response");
 
       if (typeof raw === "string") {
-        reply = raw;
-      } else if (typeof raw === "object") {
-        reply = raw.content ?? raw.text ?? raw.message ?? raw.output ?? raw.result ?? null;
-        if (!reply && Array.isArray(raw.choices) && raw.choices[0]) {
-          reply = raw.choices[0].message?.content ?? raw.choices[0].text ?? null;
+        reply = raw.trim();
+        if (reply.startsWith("{") || reply.startsWith("[")) {
+          try { reply = JSON.parse(reply); } catch {}
         }
-        if (typeof reply !== "string") reply = null;
+      } else if (typeof raw === "object") {
+        reply = raw.content ?? raw.text ?? raw.message ?? raw.output ?? raw.result ?? raw.choices?.[0]?.message?.content ?? raw.choices?.[0]?.text ?? null;
       }
 
-      if (!reply) {
+      if (!reply || (typeof reply === "object")) {
         reply = "Great question! For the full details, leave your email and our team will get back to you.";
       }
 
       hideTyping();
-      chatHistory.push({ role: "assistant", content: reply });
-      showBot(reply);
+      chatHistory.push({ role: "assistant", content: String(reply) });
+      showBot(String(reply));
     } catch (err) {
+      console.error("Puter chat error:", err);
       hideTyping();
       const fallback = "I’m having trouble connecting right now. Please enter your email and our team will help you directly.";
       showBot(fallback);

@@ -13,21 +13,23 @@
 <style>
   :root{
     --black:#0a0a0a;
-    --black-soft:#121212;
-    --navy:#0c1730;
-    --navy-soft:#13204a;
-    --cream:#f8f3e9;
-    --cream-card:#ffffff;
-    --gold:#cda14c;
+    ;
+    ;
+    --black-soft:#121212 ;
+    --navy:#0c1730       ;
+    --navy-soft:#13204a  ;
+    --cream:#f8f3e9      ;
+    --cream-card:#ffffff ;
+    --gold:#cda14c       ;
     --gold-bright:#e9cf86;
-    --gold-deep:#9c7a2e;
-    --ink:#1c1c1e;
-    --line:rgba(255,255,255,0.10);
-    --line-dark:rgba(0,0,0,0.08);
-    --grey:#a9a9ad;
-    --display:'Anton', sans-serif;
+    --gold-deep:#9c7a2e  ;
+    --ink:#1c1c1e        ;
+    --line:rgba(255,255,255,0.10)   ;
+    --line-dark:rgba(0,0,0,0.08)   ;
+    --grey:#a9a9ad       ;
+    --display:'Anton', sans-serif   ;
     --serif:'Playfair Display', serif;
-    --body:'Inter', sans-serif;
+    --body:'Inter', sans-serif      ;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -67,7 +69,15 @@
   @media (max-width:880px){ .nav-links{ display:none; } .hamburger{ display:flex; } }
 
   /* HERO — photo + dark overlay text panel, matching reference layout */
-  .hero{ position:relative; min-height:600px; display:flex; align-items:center; overflow:hidden; border-bottom:1px solid var(--line); background:var(--black); }
+  .hero{ position:relative; min-height:600px; display:flex; align-items:center; overflow:hidden; border-bottom:1px solid var(--line); }
+  .hero-photo{
+    position:absolute; inset:0;
+    background:url('images/rene-portrait-crop.png') center 15%/cover no-repeat, var(--black);
+  }
+  .hero-photo::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(90deg, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.88) 32%, rgba(8,8,8,0.35) 58%, rgba(8,8,8,0.05) 78%);
+  }
   .hero-panel{ position:relative; z-index:2; max-width:560px; padding:64px 24px; }
   .hero-panel .eyebrow{ display:block; margin-bottom:18px; }
   .hero-panel h1{ font-size:clamp(36px,5vw,58px); margin-bottom:6px; }
@@ -84,7 +94,7 @@
 
   /* COMMUNITY — structured photo + text section (replaces decorative banner) */
   .community{ padding:96px 0; background:var(--black); }
-  .community .wrap{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:64px; align-items:center; }
+  .community .wrap{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
   .community-photo{ position:relative; border-radius:12px; overflow:hidden; border:1px solid rgba(205,161,76,0.25); }
   .community-photo img{ width:100%; height:100%; object-fit:cover; }
   .community-text .eyebrow{ display:block; margin-bottom:16px; }
@@ -165,8 +175,8 @@
 </header>
 
 <section class="hero">
+  <div class="hero-photo"></div>
   <div class="wrap">
-    <img src="images/digitalpronow-hero.png" alt="Digital Pro Now hero" style="position:absolute; right:0; top:0; width:50%; height:100%; object-fit:cover; opacity:0.9; z-index:1;">
     <div class="hero-panel">
       <span class="eyebrow">Attention: Busy Parents · Burned-Out Professionals · 9–5 Workers</span>
       <h1>Discover Your<span class="line2">Blueprint</span></h1>
@@ -212,14 +222,7 @@
       <p>Faith-driven media for a purpose-driven generation. WYP's faith-driven foundation meets DGC's digital growth strategies to help you build a purpose-filled business that creates lasting impact.</p>
       <a href="#cta" class="btn">Your New Life Starts Now</a>
     </div>
-    <div class="community-photo">
-      <img src="images/rene-portrait-crop.png" alt="René Manfre portrait">
-    </div>
   </div>
-</section>
-
-<section class="banner-section">
-  <img src="images/wyp-dgc-together.png" alt="WYP x Digital Growth Community together">
 </section>
 
 <section class="why-join" id="why-join">
@@ -238,7 +241,7 @@
       </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#cda14c" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M2 9h2M2 15h2M20 9h2M20 15h2M9 2v2M15 2v2M9 20v2M15 20v2"/></svg></div>
-        <h3>Learn AI, Automation &amp; Modern Business Skills</h3>
+        <h3>Learn AI, Automation & Modern Business Skills</h3>
         <p>Gain access to practical training, workshops, tools, and real-world strategies that help you leverage AI, automation, marketing, branding, sales, and leadership to stay ahead of the curve.</p>
       </div>
       <div class="feature">
@@ -248,7 +251,7 @@
       </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#cda14c" stroke-width="1.6"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
-        <h3>Build Your Personal Brand &amp; Business</h3>
+        <h3>Build Your Personal Brand & Business</h3>
         <p>Whether you're an employee, entrepreneur, founder, consultant, tradesperson, student, or creator, we'll help you increase visibility, build credibility, grow your network, and create multiple income streams.</p>
       </div>
       <div class="feature">
@@ -270,11 +273,7 @@
 </section>
 
 <section class="banner-section">
-  <img src="images/rene-manfre-coach.png" alt="René Manfre — Career &amp; Business Coach, What's Your Passion">
-</section>
-
-<section class="banner-section">
-  <img src="images/wyp-media-banner.png" alt="WYP Media banner">
+  <img src="images/rene-manfre-coach.png" alt="René Manfre — Career & Business Coach, What's Your Passion">
 </section>
 
 <section class="mission">
@@ -307,14 +306,14 @@
     <div class="footer-top">
       <div class="logo">DIGITAL PRO <span class="now">NOW</span></div>
       <div class="footer-links">
-        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Terms & Conditions</a>
         <a href="#">Privacy Policy</a>
         <a href="#">Earnings Disclaimer</a>
       </div>
     </div>
     <div class="disclaimer">
       <p>All rights reserved. Disclaimer: These programs, as per social media platform terms, are not sponsored. Earnings and income representations made by this website, its programs, and any associated products or services are aspirational statements only regarding potential earnings. Success stories and testimonials shared are exceptional, non-typical results and are not intended to guarantee that you or others will achieve the same outcomes. Individual results will vary and depend entirely on your individual capacity, work ethic, business skills, experience, level of motivation, diligence in applying the strategies, the economy, normal and unforeseen risks of doing business, and other factors.</p>
-      <p>This website and its associated programs are not responsible for your actions. You are solely responsible for your own decisions and outcomes, and the evaluation and use of our products and services should be based on your own due diligence. By using our services, you agree that we are not liable for your results. Please refer to our Terms &amp; Conditions for our full disclaimer of liability and additional restrictions.</p>
+      <p>This website and its associated programs are not responsible for your actions. You are solely responsible for your own decisions and outcomes, and the evaluation and use of our products and services should be based on your own due diligence. By using our services, you agree that we are not liable for your results. Please refer to our Terms & Conditions for our full disclaimer of liability and additional restrictions.</p>
     </div>
     <p class="copyright">© 2026 Digital Pro Now. All rights reserved.</p>
   </div>

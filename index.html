@@ -68,16 +68,8 @@
   header .btn{ padding:11px 22px; font-size:12px; }
   @media (max-width:880px){ .nav-links{ display:none; } .hamburger{ display:flex; } }
 
-  /* HERO — photo + dark overlay text panel, matching reference layout */
-  .hero{ position:relative; min-height:600px; display:flex; align-items:center; overflow:hidden; border-bottom:1px solid var(--line); }
-  .hero-photo{
-    position:absolute; inset:0;
-    background:url('images/rene-portrait-crop.png') center 15%/cover no-repeat, var(--black);
-  }
-  .hero-photo::after{
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(90deg, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.88) 32%, rgba(8,8,8,0.35) 58%, rgba(8,8,8,0.05) 78%);
-  }
+  /* HERO */
+  .hero{ position:relative; min-height:600px; display:flex; align-items:center; overflow:hidden; border-bottom:1px solid var(--line); background:radial-gradient(circle at top left, rgba(205,161,76,0.16), transparent 34%), linear-gradient(90deg, #060606 0%, #111111 60%, #0d0d0d 100%); }
   .hero-panel{ position:relative; z-index:2; max-width:560px; padding:64px 24px; }
   .hero-panel .eyebrow{ display:block; margin-bottom:18px; }
   .hero-panel h1{ font-size:clamp(36px,5vw,58px); margin-bottom:6px; }
@@ -96,7 +88,7 @@
   .community{ padding:96px 0; background:var(--black); }
   .community .wrap{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
   .community-photo{ position:relative; border-radius:12px; overflow:hidden; border:1px solid rgba(205,161,76,0.25); }
-  .community-photo img{ width:100%; height:100%; object-fit:cover; }
+  .community-photo img{ display:block; width:100%; height:auto; object-fit:cover; }
   .community-text .eyebrow{ display:block; margin-bottom:16px; }
   .community-text h2{ font-size:clamp(28px,3.8vw,40px); margin-bottom:18px; color:#fff; }
   .community-text p{ font-family:var(--body); text-transform:none; color:#b9b9be; font-size:16px; margin-bottom:26px; }
@@ -175,7 +167,6 @@
 </header>
 
 <section class="hero">
-  <div class="hero-photo"></div>
   <div class="wrap">
     <div class="hero-panel">
       <span class="eyebrow">Attention: Busy Parents · Burned-Out Professionals · 9–5 Workers</span>
@@ -255,7 +246,7 @@
         <p>Whether you're an employee, entrepreneur, founder, consultant, tradesperson, student, or creator, we'll help you increase visibility, build credibility, grow your network, and create multiple income streams.</p>
       </div>
       <div class="feature">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#cda14c" stroke-width="1.6"><path d="M17 11a4 4 0 1 0-3.999-4.2"/><path d="M7 11a4 4 0 1 0 0-8"/><path d="M2 21c0-3.3 2.7-6 6-6m8 0c3.3 0 6 2.7 6 6"/></svg></div>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#cda14c" stroke-width="1.6"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 17a4 4 0 00-2-7.13"/></svg></div>
         <h3>Collaborate With People Who Want To See You Win</h3>
         <p>Success is rarely a solo journey. Connect with mentors, trainers, business owners, speakers, podcasters, coaches, and professionals committed to helping each other grow.</p>
       </div>

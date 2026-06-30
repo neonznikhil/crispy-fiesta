@@ -367,9 +367,9 @@
   </div>
 </div>
 
+<script src="https://js.puter.com/v2/"></script>
 <script>
 (function(){
-  const API_URL = '/api/chat';
   const toggle = document.getElementById('dpn-chat-toggle');
   const closeBtn = document.getElementById('dpn-chat-close');
   const win = document.getElementById('dpn-chat-window');
@@ -381,6 +381,26 @@
   const emailInput = document.getElementById('dpn-chat-email');
   let chatHistory = [];
   let askedEmail = false;
+
+  const SYSTEM_PROMPT = `You are the Digital Pro Now (DPN) assistant. Answer accurately and briefly.
+
+SITE CONTENT (use only this):
+- DPN offers a done-for-you digital business system with complete automation.
+- Target audience: busy parents, burned-out professionals, 9-5 workers.
+- Free community: WYP x Digital Growth Community (70,000+ members).
+- Topics: AI, automation, personal branding, business building, faith, community.
+- Call to action: get the free blueprint by entering an email address on the page.
+- Mission quote: "This isn't just about making money — it's about helping people discover their God-given talents, build meaningful lives, serve others, create freedom, strengthen families, and make a lasting impact in their communities."
+- René Manfre is the Career & Business Coach (What's Your Passion).
+- Member count: 70,000+ already transforming.
+- No fluff: practical lessons, proven frameworks, workshops, videos, articles, podcasts.
+- Earnings disclaimer: results vary, not guaranteed, individual effort required.
+
+RULES:
+- Keep replies under 2 sentences.
+- Be warm and helpful.
+- If unsure, say you'll connect the user with the team and ask for their email.
+- Always try to naturally guide users toward the free blueprint / email signup when appropriate.`;
 
   function showBot(text, isHtml){
     const div = document.createElement('div');
@@ -406,22 +426,19 @@
   }
   function hideTyping(){ const t = document.getElementById('dpn-typing'); if(t) t.remove(); }
 
-  async function askAI(text){
+  async function askAI(userText){
     showTyping();
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ messages: chatHistory })
-      });
-      const data = await res.json();
+      const reply = await puter.ai.chat(
+        [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...chatHistory
+        ],
+        { model: "openai/gpt-5.5" }
+      );
       hideTyping();
-      if(data.reply){
-        chatHistory.push({ role: 'assistant', content: data.reply });
-        showBot(data.reply);
-      } else {
-        throw new Error('no reply');
-      }
+      chatHistory.push({ role: "assistant", content: reply });
+      showBot(reply);
     } catch {
       hideTyping();
       showBot("I’m having trouble connecting to my brain right now. For now, the best way is to enter your email and our team will help you personally!");

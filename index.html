@@ -429,19 +429,22 @@ RULES:
   async function askAI(userText){
     showTyping();
     try {
-      const reply = await puter.ai.chat(
+      const raw = await puter.ai.chat(
         [
           { role: "system", content: SYSTEM_PROMPT },
           ...chatHistory
         ],
         { model: "openai/gpt-5.5" }
       );
+      const reply = typeof raw === "string" ? raw : (raw?.choices?.[0]?.message?.content ?? raw?.text ?? raw?.message ?? "Thanks! For more details, enter your email and our team will help.");
       hideTyping();
       chatHistory.push({ role: "assistant", content: reply });
       showBot(reply);
-    } catch {
+    } catch (err) {
       hideTyping();
-      showBot("I’m having trouble connecting to my brain right now. For now, the best way is to enter your email and our team will help you personally!");
+      const fallback = "I’m having trouble connecting right now. The best next step is to enter your email and our team will help you directly.";
+      showBot(fallback);
+      chatHistory.push({ role: "assistant", content: fallback });
     }
     if(!askedEmail){
       askedEmail = true;
@@ -450,14 +453,6 @@ RULES:
         emailInput.focus();
       }, 400);
     }
-  }
-
-  function handleUser(text){
-    if(!text.trim()) return;
-    showUser(text);
-    chatHistory.push({ role: 'user', content: text });
-    askAI(text);
-    input.value = '';
   }
 
   function openWin(){
@@ -473,6 +468,14 @@ RULES:
   closeBtn.onclick = closeWin;
   send.onclick = () => handleUser(input.value);
   input.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); handleUser(input.value); } });
+
+  function handleUser(text){
+    if(!text.trim()) return;
+    showUser(text);
+    chatHistory.push({ role: 'user', content: text });
+    askAI(text);
+    input.value = '';
+  }
   emailForm.addEventListener('submit', e => {
     e.preventDefault();
     const val = emailInput.value.trim();

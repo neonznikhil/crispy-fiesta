@@ -438,24 +438,33 @@ RULES:
           { role: "system", content: SYSTEM_PROMPT },
           ...chatHistory
         ],
-        { model: "openai/gpt-5.5" }
+        { model: "meta-llama/llama-4-maverick" }
       );
       console.log("Puter raw response:", raw);
 
-      let reply = "";
-      if (typeof raw === "string") reply = raw;
-      else if (raw && typeof raw === "object") {
-        reply = raw.content ?? raw.text ?? raw.message ?? raw.output ?? raw.result ?? raw.choices?.[0]?.message?.content ?? raw.data ?? "";
-        if (typeof reply !== "string") reply = JSON.stringify(reply);
+      let reply = null;
+      if (!raw) throw new Error("empty response");
+
+      if (typeof raw === "string") {
+        reply = raw;
+      } else if (typeof raw === "object") {
+        reply = raw.content ?? raw.text ?? raw.message ?? raw.output ?? raw.result ?? null;
+        if (!reply && Array.isArray(raw.choices) && raw.choices[0]) {
+          reply = raw.choices[0].message?.content ?? raw.choices[0].text ?? null;
+        }
+        if (typeof reply !== "string") reply = null;
       }
-      if (!reply || reply === "{}" || reply === "[]") reply = "Thanks! For more details, enter your email and our team will help.";
+
+      if (!reply) {
+        reply = "Great question! For the full details, leave your email and our team will get back to you.";
+      }
 
       hideTyping();
       chatHistory.push({ role: "assistant", content: reply });
       showBot(reply);
     } catch (err) {
       hideTyping();
-      const fallback = "I’m having trouble connecting right now. The best next step is to enter your email and our team will help you directly.";
+      const fallback = "I’m having trouble connecting right now. Please enter your email and our team will help you directly.";
       showBot(fallback);
       chatHistory.push({ role: "assistant", content: fallback });
     }

@@ -369,7 +369,7 @@
 
 <script src="https://js.puter.com/v2/"></script>
 <script>
-(function(){
+(async function(){
   const toggle = document.getElementById('dpn-chat-toggle');
   const closeBtn = document.getElementById('dpn-chat-close');
   const win = document.getElementById('dpn-chat-window');
@@ -381,6 +381,10 @@
   const emailInput = document.getElementById('dpn-chat-email');
   let chatHistory = [];
   let askedEmail = false;
+
+  if (typeof puter === "undefined" || !puter.ai || !puter.ai.chat) {
+    showBot("Chat is loading… If this stays here, Puter.js may be blocked in your region or by an extension.");
+  }
 
   const SYSTEM_PROMPT = `You are the Digital Pro Now (DPN) assistant. Answer accurately and briefly.
 
